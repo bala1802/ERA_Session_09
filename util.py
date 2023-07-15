@@ -87,4 +87,7 @@ def display_data(data_loader):
     imshow(torchvision.utils.make_grid(images[:4]))
     classes = load_classes()
     print(' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
+
+def load_optimizer(model):
+    return optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
     
