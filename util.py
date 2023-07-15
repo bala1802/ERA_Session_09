@@ -17,6 +17,8 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torchvision.transforms.functional import to_tensor
 
+import numpy as np
+
 SEED = 1
 
 # CUDA?
@@ -68,3 +70,21 @@ def get_transforms(mode):
 def construct_loader(data):
     dataloader_args = dict(shuffle=True, batch_size=512, num_workers=0, pin_memory=True) if cuda else dict(shuffle=True, batch_size=64)
     return torch.utils.data.DataLoader(data, **dataloader_args)
+
+def imshow(img):
+    img = img / 2 + 0.5     # unnormalize
+    npimg = img.numpy()
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    plt.show()
+
+def load_classes():
+    return ('plane', 'car', 'bird', 'cat',
+            'deer', 'dog', 'frog', 'horse','ship', 'truck')
+
+def display_data(data_loader):
+    dataiter = iter(data_loader)
+    images, labels = next(dataiter)
+    imshow(torchvision.utils.make_grid(images[:4]))
+    classes = load_classes()
+    print(' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
+    
